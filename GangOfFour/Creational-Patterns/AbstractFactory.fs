@@ -1,4 +1,4 @@
-﻿namespace GangOfFour.Adapter
+﻿namespace GangOfFour.AbstractFactory
 
 open System.Collections.Generic
 
