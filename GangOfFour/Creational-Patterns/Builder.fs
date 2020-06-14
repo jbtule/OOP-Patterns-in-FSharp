@@ -72,14 +72,14 @@ type StandardMazeBuilder () =
             room.SetSide(West, Wall())
         | _ -> ()
     override _.BuildDoor(n1, n2) =
-        let r1 = getMaze().RoomNo(n1)
-        let r2 = getMaze().RoomNo(n2)
-        match r1, r2 with
-        | Some r1', Some r2' ->
-            let door = Door(r1', r2')
-            let d1,d2 = commonWall r1' r2'
-            r1'.SetSide(d1, door)
-            r2'.SetSide(d2, door)
+        let checkR1 = getMaze().RoomNo(n1)
+        let checkR2 = getMaze().RoomNo(n2)
+        match checkR1, checkR2 with
+        | Some r1, Some r2 ->
+            let door = Door(r1, r2)
+            let d1,d2 = commonWall r1 r2
+            r1.SetSide(d1, door)
+            r2.SetSide(d2, door)
         | f1, f2 -> failwithf "Build Door requires both Rooms %i:%A, %i:%A." n1 f1 n2 f2 
 
 type CountingMazeBuilder() =
