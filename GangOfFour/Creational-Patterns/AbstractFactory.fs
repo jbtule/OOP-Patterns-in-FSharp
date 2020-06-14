@@ -2,6 +2,7 @@
 
 open System.Collections.Generic
 
+///Domain Clases
 type Direction = North | East | South | West
 
 [<AbstractClass>]
@@ -18,7 +19,7 @@ type Maze () =
     let rooms = ResizeArray()
     member _.AddRoom(r) = 
         rooms.Add(r)
-
+/// Base Abstract Factory
 type MazeFactory () =
     abstract MakeMaze: unit -> Maze
     default _.MakeMaze () = Maze()
@@ -32,6 +33,7 @@ type MazeFactory () =
     abstract MakeDoor: Room * Room -> Door
     default _.MakeDoor(r1, r2) = Door(r1,r2)
 
+/// Usage of Factory
 type MazeGame () =
     member _.CreateMaze(factory:#MazeFactory) =
         let maze = factory.MakeMaze()
@@ -53,7 +55,7 @@ type MazeGame () =
         r2.SetSide(West, door)
         maze
 
-//Enchanted Maze
+///Enchanted Maze Alternative Factory implemenation
 type Spell = Alohomora
 type EnchantedRoom (n, s) = inherit Room (n)
 type DoorNeedingSpell(r1, r2) = inherit Door(r1, r2)
@@ -65,7 +67,7 @@ type EnchantedMazeFactory () =
     override _.MakeDoor(r1,r2) = 
         upcast DoorNeedingSpell(r1,r2)
 
-//Bomb Maze
+///Bomb Maze Alternative Factory implemenation
 type BombedWall () = inherit Wall()
 type RoomWithABomb(n) = inherit Room(n)
 type BombMazeFactory () =

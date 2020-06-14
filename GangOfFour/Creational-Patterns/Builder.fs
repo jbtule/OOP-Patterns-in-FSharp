@@ -2,6 +2,7 @@ namespace GangOfFour.Builder
 
 open System.Collections.Generic
 
+///Domain Clases
 type Direction = North | East | South | West
 
 [<AbstractClass>]
@@ -25,6 +26,8 @@ type Maze () =
         let exists,r =rooms.TryGetValue(n)
         if exists then Some r else None
 
+
+///Base Builder 
 [<AbstractClass>]
 type MazeBuilder () =
     abstract BuildMaze: unit -> unit
@@ -32,6 +35,7 @@ type MazeBuilder () =
     abstract BuildDoor: int * int -> unit
     abstract GetMaze: unit -> Maze
 
+///Standard Builder 
 type StandardMazeBuilder () =
     inherit MazeBuilder()
     let mutable _currentMaze = None
@@ -82,6 +86,7 @@ type StandardMazeBuilder () =
             r2.SetSide(d2, door)
         | f1, f2 -> failwithf "Build Door requires both Rooms %i:%A, %i:%A." n1 f1 n2 f2 
 
+///Counting Maze Alternative Builder Implemenation
 type CountingMazeBuilder() =
     inherit MazeBuilder()
     let mutable _rooms,_doors = 0,0

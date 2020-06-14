@@ -1,8 +1,8 @@
 namespace rec GangOfFour.Adapter
 
+//Domain Classes
 type Point = {X:float; Y:float}
 type BoundingBox = {BottomLeft: Point; TopRight:Point}
-
 
 [<AbstractClass>]
 type Shape () =
@@ -16,9 +16,10 @@ type TextView () =
     abstract IsEmpty: unit -> bool
 
 type Manipulator () = class end
+
+//Object Adapters
 type TextManipulator (ts: TextShape) =
     inherit Manipulator ()
-
 type TextShape(textView:TextView) =
     inherit Shape()
     override _.BoundingBox with get () =

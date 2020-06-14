@@ -2,6 +2,7 @@ module GangOfFour.Singleton
 
 open GangOfFour.AbstractFactory
 
+///Singleton Lazy Store
 let private instance =
     lazy 
         let mazeStyle = System.Environment.GetEnvironmentVariable("MAZESTYLE") 
@@ -12,5 +13,6 @@ let private instance =
             | _ -> MazeFactory()
         fac
 
+//Singleton added to Maze Factory class
 type MazeFactory with
     static member Instance () = instance.Force()

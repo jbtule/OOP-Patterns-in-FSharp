@@ -19,7 +19,9 @@ type Maze () =
     member _.AddRoom(r) = 
         rooms.Add(r)
 
+
 type MazeGame () =
+    //Factory Methods
     abstract MakeMaze: unit -> Maze
     default _.MakeMaze () = Maze()
 
@@ -32,6 +34,7 @@ type MazeGame () =
     abstract MakeDoor: Room * Room -> Door
     default _.MakeDoor(r1, r2) = Door(r1,r2)
 
+    ///Normal Game setup
     member this.CreateMaze() =
         let maze = this.MakeMaze()
         let r1 = this.MakeRoom(1)
@@ -52,7 +55,7 @@ type MazeGame () =
         r2.SetSide(West, door)
         maze
 
-//Enchanted Maze
+///Enchanted Maze Alternative Game implemenation
 type Spell = Alohomora
 type EnchantedRoom (n, s) = inherit Room (n)
 type DoorNeedingSpell(r1, r2) = inherit Door(r1, r2)
@@ -64,7 +67,7 @@ type EnchantedMazeGame () =
     override _.MakeDoor(r1,r2) = 
         upcast DoorNeedingSpell(r1,r2)
 
-//Bomb Maze
+///Bomb Maze Alternative Game implemenation
 type BombedWall () = inherit Wall()
 type RoomWithABomb(n) = inherit Room(n)
 type BombMazeGame () =

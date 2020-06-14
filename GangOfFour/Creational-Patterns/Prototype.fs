@@ -2,6 +2,7 @@ namespace GangOfFour.Prototype
 
 open GangOfFour.AbstractFactory
 
+///Copy Extensions
 module CopyExtensions =
     type Reflect = System.Activator
     type Wall with
@@ -22,6 +23,7 @@ module CopyExtensions =
             downcast Reflect.CreateInstance(this.GetType())
 
 open CopyExtensions
+///General Prototype Factory
 type MazePrototypeFactory (maze:Maze, wall:Wall, room:Room, door:Door) =
     inherit MazeFactory()
     override _.MakeWall() = wall.CopyWall()
@@ -29,6 +31,7 @@ type MazePrototypeFactory (maze:Maze, wall:Wall, room:Room, door:Door) =
     override _.MakeRoom(n) = room.CopyRoom(n)
     override _.MakeMaze() = maze.CopyMaze()
 
+///Prototype Instances
 module MazeFactories =
     let simpleMazeFactor = MazePrototypeFactory(Maze(), Wall(), Room.Prototype<Room>(), Door.Prototype<Door>())
     let bombedMazeFactor = MazePrototypeFactory(Maze(), BombedWall(), Room.Prototype<RoomWithABomb>(), Door.Prototype<Door>())
