@@ -32,23 +32,23 @@ type MazeGame () =
     abstract MakeDoor: Room * Room -> Door
     default _.MakeDoor(r1, r2) = Door(r1,r2)
 
-    member factory.CreateMaze() =
-        let maze = factory.MakeMaze()
-        let r1 = factory.MakeRoom(1)
-        let r2 = factory.MakeRoom(2)
-        let door = factory.MakeDoor(r1,r2)
+    member this.CreateMaze() =
+        let maze = this.MakeMaze()
+        let r1 = this.MakeRoom(1)
+        let r2 = this.MakeRoom(2)
+        let door = this.MakeDoor(r1,r2)
         
         maze.AddRoom(r1)
         maze.AddRoom(r2)
 
-        r1.SetSide(North, factory.MakeWall())
+        r1.SetSide(North, this.MakeWall())
         r1.SetSide(East, door)
-        r1.SetSide(South, factory.MakeWall())
-        r1.SetSide(West, factory.MakeWall())
+        r1.SetSide(South, this.MakeWall())
+        r1.SetSide(West, this.MakeWall())
 
-        r2.SetSide(North, factory.MakeWall())
-        r2.SetSide(East, factory.MakeWall())
-        r2.SetSide(South, factory.MakeWall())     
+        r2.SetSide(North, this.MakeWall())
+        r2.SetSide(East, this.MakeWall())
+        r2.SetSide(South, this.MakeWall())     
         r2.SetSide(West, door)
         maze
 
