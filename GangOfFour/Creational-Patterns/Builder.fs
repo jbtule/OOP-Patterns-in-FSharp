@@ -96,5 +96,5 @@ type CountingMazeBuilder() =
         _rooms <- _rooms + 1
     override _.BuildDoor(_,_) =
         _doors <- _doors + 1
-    override _.GetMaze () = raise <| System.NotImplementedException() 
+    override _.GetMaze () = raise <| System.NotSupportedException() 
     member _.GetCounts() = struct (_rooms, _doors)
