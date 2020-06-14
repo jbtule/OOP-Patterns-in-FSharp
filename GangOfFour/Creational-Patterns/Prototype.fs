@@ -2,7 +2,7 @@ namespace GangOfFour.Prototype
 
 open GangOfFour.AbstractFactory
 
-///Copy Extensions
+///Copy Extensions - So we don't need to clutter the abstract factory example
 module CopyExtensions =
     type Reflect = System.Activator
     type Wall with
