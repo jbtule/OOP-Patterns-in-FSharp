@@ -16,9 +16,10 @@ type TextView () =
     abstract IsEmpty: unit -> bool
 
 type Manipulator () = class end
+type TextManipulator (ts: TextShape) =
+    inherit Manipulator ()
 
-type TextManipulator (ts: TextShape) = inherit Manipulator ()
-and TextShape(textView:TextView) =
+type TextShape(textView:TextView) =
     inherit Shape()
     override _.BoundingBox with get () =
         let left, bottom = textView.GetOrigin()
