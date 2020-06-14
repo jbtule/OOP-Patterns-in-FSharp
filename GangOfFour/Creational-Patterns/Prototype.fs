@@ -1,55 +1,27 @@
-namespace rec GangOfFour.Prototype
+namespace GangOfFour.Prototype
 
-open System.Collections.Generic
-type private Make = System.Activator
+open GangOfFour.AbstractFactory
 
-type Direction = North | East | South | West
+module CopyExtensions =
+    type Reflect = System.Activator
+    type Wall with
+        member this.CopyWall() : Wall =
+            downcast Reflect.CreateInstance(this.GetType())
+    type Room with
+        member this.CopyRoom(n:int) : Room =
+            downcast Reflect.CreateInstance(this.GetType(),n)
+        static member Prototype<'T when 'T :> Room> () : 'T = 
+            downcast Reflect.CreateInstance(typeof<'T>,0)
+    type Door with
+        member this.CopyDoor(r1:Room, r2:Room) : Door =
+            downcast Reflect.CreateInstance(this.GetType(),r1,r2)
+        static member Prototype<'T when 'T :> Door> () : 'T = 
+            downcast Reflect.CreateInstance(typeof<'T>,Room.Prototype<Room>(), Room.Prototype<Room>())   
+    type Maze with
+        member this.CopyMaze() : Maze =
+            downcast Reflect.CreateInstance(this.GetType())
 
-[<AbstractClass>]
-type Edge () = class end
-type Wall () =
-    inherit Edge ()
-    abstract CopyWall: unit -> Wall
-    override this.CopyWall() =
-        downcast Make.CreateInstance(this.GetType())
-
-type Door (r1:Room, r2:Room) = 
-    inherit Edge ()
-    internal new () = Door(Room(),Room())
-    abstract CopyDoor: Room * Room -> Door
-    override this.CopyDoor(nr1, nr2) =
-        downcast Make.CreateInstance(this.GetType(),nr1,nr2)
-
-type Room (n:int) =
-    let sides = new Dictionary<Direction, Edge>()
-    internal new () = Room(0)
-    member _.SetSide(d, e:#Edge) =
-        sides.[d] <- e
-    abstract CopyRoom: int -> Room
-    default this.CopyRoom(n) =
-        downcast Make.CreateInstance(this.GetType(),n)
-
-type Maze () =
-    let rooms = ResizeArray()
-    member _.AddRoom(r) = 
-        rooms.Add(r)
-    abstract CopyMaze: unit -> Maze
-    default this.CopyMaze() =
-        downcast Make.CreateInstance(this.GetType())
-
-type MazeFactory () =
-    abstract MakeMaze: unit -> Maze
-    default _.MakeMaze () = Maze()
-
-    abstract MakeWall: unit -> Wall
-    default _.MakeWall() = Wall()
-
-    abstract MakeRoom: int -> Room
-    default _.MakeRoom(n) = Room(n)
-    
-    abstract MakeDoor: Room * Room -> Door
-    default _.MakeDoor(r1, r2) = Door(r1,r2)
-
+open CopyExtensions
 type MazePrototypeFactory (maze:Maze, wall:Wall, room:Room, door:Door) =
     inherit MazeFactory()
     override _.MakeWall() = wall.CopyWall()
@@ -57,13 +29,6 @@ type MazePrototypeFactory (maze:Maze, wall:Wall, room:Room, door:Door) =
     override _.MakeRoom(n) = room.CopyRoom(n)
     override _.MakeMaze() = maze.CopyMaze()
 
-
-//Bomb Maze
-type BombedWall () = inherit Wall()
-type RoomWithABomb(n) = 
-    inherit Room(n)
-    new () = RoomWithABomb(0)
-
 module MazeFactories =
-    let simpleMazeFactor = MazePrototypeFactory(Maze(), Wall(), Room(), Door())
-    let bombedMazeFactor = MazePrototypeFactory(Maze(), BombedWall(), RoomWithABomb(), Door())
+    let simpleMazeFactor = MazePrototypeFactory(Maze(), Wall(), Room.Prototype<Room>(), Door.Prototype<Door>())
+    let bombedMazeFactor = MazePrototypeFactory(Maze(), BombedWall(), Room.Prototype<RoomWithABomb>(), Door.Prototype<Door>())
