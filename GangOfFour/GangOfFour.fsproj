@@ -3,8 +3,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Creation Patterns/*.fs" />
-    <Compile Include="Structural Patterns/*.fs" />
-    <Compile Include="Behavioral Patterns/*.fs" />
+    <Compile Include="Creational-Patterns/*.fs" />
+    <Compile Include="Structural-Patterns/*.fs" />
+    <Compile Include="Behavioral-Patterns/*.fs" />
   </ItemGroup>
 </Project>
