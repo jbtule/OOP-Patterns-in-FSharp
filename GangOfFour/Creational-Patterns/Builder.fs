@@ -39,6 +39,8 @@ type StandardMazeBuilder () =
         match _currentMaze with
         | Some m -> m 
         | None -> failwith "BuildMaze() was never called." 
+    // The Sample code didn't implement the "commonWall" utility function.
+    // This is the dumbest implementation I could think of that was reasonable.
     let commonWall (r1:Room) (r2:Room) =
         let combos =
             [
