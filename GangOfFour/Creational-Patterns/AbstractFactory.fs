@@ -1,4 +1,15 @@
-﻿namespace GangOfFour.AbstractFactory
+﻿(********************************************************** 
+ * Abstract Factory (page 87)
+ *   aka Kit
+ * Design Patterns: Elements of Reusable Object-Oriented Software
+ *   by Gamma, Helm, Johnson, & Vlissides
+ * Sample Code Ported to F#
+ *
+ * - Initally Ported by Jay Tuley (Jun 2020)
+ *
+ **********************************************************)
+
+namespace GangOfFour.AbstractFactory
 
 open System.Collections.Generic
 

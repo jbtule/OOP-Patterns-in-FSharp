@@ -1,3 +1,13 @@
+(***************************************************************** 
+ * Adapter (page 139)
+ *  aka Wrapper
+ * Design Patterns: Elements of Reusable Object-Oriented Software
+ *   by Gamma, Helm, Johnson, & Vlissides
+ * Sample Code Ported to F#
+ *
+ * - Initally Ported by Jay Tuley (Jun 2020)
+ *
+ *****************************************************************)
 namespace rec GangOfFour.Adapter
 
 //Domain Classes

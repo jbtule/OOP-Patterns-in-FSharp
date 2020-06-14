@@ -1,3 +1,14 @@
+(***************************************************************** 
+ * Factory Method (page 107)
+ *  aka Virtual Constructor
+ * Design Patterns: Elements of Reusable Object-Oriented Software
+ *   by Gamma, Helm, Johnson, & Vlissides
+ * Sample Code Ported to F#
+ *
+ * - Initally Ported by Jay Tuley (Jun 2020)
+ *
+ *****************************************************************)
+
 namespace GangOfFour.FactoryMethod
 
 open System.Collections.Generic
