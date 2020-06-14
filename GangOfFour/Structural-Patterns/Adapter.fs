@@ -1,4 +1,4 @@
-module rec GangOfFour.Adapter
+namespace rec GangOfFour.Adapter
 
 type Point = {X:float; Y:float}
 type BoundingBox = {BottomLeft: Point; TopRight:Point}
