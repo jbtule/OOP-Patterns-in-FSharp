@@ -1,9 +1,10 @@
 module GangOfFour.Bridge
 
+///Sample code Helpers
 let private notImpl msg = raise <| System.NotImplementedException(msg)
-
 type NotFullyImplementedForExampleAttribute = AbstractClassAttribute
 
+///Domain Code
 type Point = {X:float; Y:float}
 
 [<NotFullyImplementedForExample>]
@@ -61,6 +62,8 @@ type IconWindow(bitmap:byte[]) =
         let imp = this.GetWindowImp()
         imp.DeviceBitmap(bitmap, 0.0, 0.0)
 
+///Domain Library Code
+
 module XWindowLib =
     [<AllowNullLiteral>]
     type Display = class end
@@ -70,6 +73,23 @@ module XWindowLib =
     type GC = class end
     let XDrawRectangle(d:Display, id: Drawable, g:GC, x: int, y:int, w:int, h:int) =
         notImpl "Library Implementation"
+
+module PMWindowLib =
+    [<AllowNullLiteral>]
+    type HPS = class end
+    type PPOINTL = 
+        struct
+            val mutable x: float
+            val mutable y: float
+        end
+    type STATUS = GPI_SUCESS | GPI_ERROR
+    let GpiBeginPath(_:HPS, _:int64) : bool = notImpl "Library Implementation"
+    let GpiSetCurrentPosition(_:HPS, _: PPOINTL) : bool = notImpl "Library Implementation"
+    let GpiPolyLine(_:HPS, _:int64, _: PPOINTL array) : STATUS = notImpl "Library Implementation"
+    let GpiEndPath(_:HPS) : bool = notImpl "Library Implementation"
+    let GpiStrokePath(_:HPS, _:int64, _:int64) = notImpl "Library Implementation"
+
+///Bridge Code
 
 [<AutoOpen>]
 module XWindowBrdige =
@@ -85,20 +105,6 @@ module XWindowBrdige =
             let h = y0 - y1 |> abs |> round |> int 
             XDrawRectangle(dpy, winId, gc, x, y, w, h)
 
-module PMWindowLib =
-    [<AllowNullLiteral>]
-    type HPS = class end
-    type PPOINTL = 
-        struct
-            val mutable x: float
-            val mutable y: float
-        end
-    type STATUS =  GPI_SUCESS | GPI_ERROR
-    let GpiBeginPath(_:HPS, _:int64) : bool = notImpl "Library Implementation"
-    let GpiSetCurrentPosition(_:HPS, _: PPOINTL) : bool = notImpl "Library Implementation"
-    let GpiPolyLine(_:HPS, _:int64, _: PPOINTL array) : STATUS = notImpl "Library Implementation"
-    let GpiEndPath(_:HPS) : bool = notImpl "Library Implementation"
-    let GpiStrokePath(_:HPS, _:int64, _:int64) = notImpl "Library Implementation"
 [<AutoOpen>]
 module PMWindowBridge =
     open PMWindowLib
@@ -112,6 +118,7 @@ module PMWindowBridge =
             let bottom = min y0 y1
             let top = max y0 y1
 
+            //Simulating actual bridged data structure
             let point = Array.zeroCreate<PPOINTL> 4
             let rect = 
                 [
