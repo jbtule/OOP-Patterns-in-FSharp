@@ -1,4 +1,4 @@
-﻿(********************************************************** 
+﻿(***************************************************************** 
  * Abstract Factory (page 87)
  *   aka Kit
  * Design Patterns: Elements of Reusable Object-Oriented Software
@@ -7,7 +7,7 @@
  *
  * - Initally Ported by Jay Tuley (Jun 2020)
  *
- **********************************************************)
+ *****************************************************************)
 
 namespace GangOfFour.AbstractFactory
 
