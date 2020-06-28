@@ -17,7 +17,7 @@ open System.IO
 type MatchStream = 
     { Data:string; Position:int} with 
     member this.NextAvailable(size) =
-        this.Data.[this.Position..size], {this with Position = this.Position + size}
+        this.Data.[this.Position..this.Position + size - 1], {this with Position = this.Position + size}
 
 type State (?init:string) =
     let streams = ResizeArray<MatchStream>()
@@ -25,6 +25,8 @@ type State (?init:string) =
         init |> Option.iter (fun s-> {Data=s;Position=0} |> streams.Add)
     member _.IsEmpty with get () = 
         streams |> Seq.isEmpty
+    member _.Success with get () =
+        streams |> Seq.where (fun x->x.Data.Length = x.Position) |> (not << Seq.isEmpty)
     member _.Add(s:MatchStream) = 
         s |> streams.Add
     member _.Iter (action:MatchStream -> unit) =
@@ -58,7 +60,7 @@ and RepetitionExpression(repeat:RegularExpression) =
     override _.Match(inputState) =
         let mutable state = inputState
         let finalState = inputState.Copy()
-        while state.IsEmpty do
+        while not <| state.IsEmpty do
             state <- state |> repeat.Match
             state |> finalState.AddAll
         finalState
@@ -97,6 +99,7 @@ module Example =
 
     let main _ =
         let regex = ("dog ".Expr .| "cat ".Expr).Repeat .& "weather".Expr
-        let find = (State "dog cat dog cat weather") |> regex.Match
-        //do something    
+        let m = (State "dog cat dog cat weather") |> regex.Match
+        if(m.Success) then
+              printfn "Matched!"
         ()
