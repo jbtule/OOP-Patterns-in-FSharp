@@ -106,3 +106,63 @@ module RegExInterpretor =
             ()
 
 module BooleanInterpreter =
+    ///Sample code Helpers
+    let private notImpl msg = raise <| System.NotImplementedException(msg)
+
+    //Interpretor 
+    type Context () = 
+        member _.Lookup (name:string) : bool = notImpl "Variable lookup"
+        member _.Assign (exp:VariableExp, value:bool) : unit = notImpl "Variable assignment"
+
+    and [<AbstractClass>] BooleanExp () = 
+        abstract Evaluate: Context -> bool
+        abstract Replace: string * BooleanExp -> BooleanExp
+        abstract Copy: unit -> BooleanExp
+
+    and VariableExp (name:string) =
+        inherit BooleanExp()
+        override _.Evaluate(context) = 
+            context.Lookup(name)
+        override _.Copy() = 
+            upcast VariableExp(name)
+        override _.Replace(name', exp) =
+            if name = name' then
+                exp.Copy()
+            else
+                upcast VariableExp(name)
+
+    and AndExp (op1:BooleanExp, op2:BooleanExp) = 
+        inherit BooleanExp()
+        override _.Evaluate(context) =
+            op1.Evaluate(context) && op2.Evaluate(context)
+        override _.Copy() = 
+            upcast AndExp(op1.Copy(), op2.Copy())    
+        override _.Replace(name', exp) =
+            upcast AndExp(op1.Replace(name', exp), op1.Replace(name', exp))  
+
+    and OrExp (op1:BooleanExp, op2:BooleanExp) = 
+        inherit BooleanExp()
+        override _.Evaluate(context) =
+            op1.Evaluate(context) || op2.Evaluate(context)
+        override _.Copy() = 
+            upcast OrExp(op1.Copy(), op2.Copy())    
+        override _.Replace(name', exp) =
+            upcast OrExp(op1.Replace(name', exp), op1.Replace(name', exp))  
+
+    and NotExp (op1:BooleanExp) = 
+        inherit BooleanExp()
+        override _.Evaluate(context) =
+            not <| op1.Evaluate(context)
+        override _.Copy() = 
+            upcast NotExp(op1.Copy())   
+        override _.Replace(name', exp) =
+            upcast NotExp(op1.Replace(name', exp))  
+
+    and Constant(value:bool) = 
+        inherit BooleanExp()
+        override _.Evaluate(context) =
+            value
+        override _.Copy() = 
+            upcast Constant(value)
+        override _.Replace(name', exp) =
+            upcast Constant(value)
