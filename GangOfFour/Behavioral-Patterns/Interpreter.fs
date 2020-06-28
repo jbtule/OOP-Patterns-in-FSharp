@@ -19,8 +19,10 @@ type MatchStream =
     member this.NextAvailable(size) =
         this.Data.[this.Position..size], {this with Position = this.Position + size}
 
-type State () =
+type State (?init:string) =
     let streams = ResizeArray<MatchStream>()
+    do
+        init |> Option.iter (fun s-> {Data=s;Position=0} |> streams.Add)
     member _.IsEmpty with get () = 
         streams |> Seq.isEmpty
     member _.Add(s:MatchStream) = 
@@ -38,16 +40,19 @@ type State () =
 [<AbstractClass>]
 type RegularExpression () = 
     abstract Match:State -> State
+
 and SequenceExpression(exp1:RegularExpression, exp2:RegularExpression) =
     inherit RegularExpression()
     override _.Match(inputState) =
         inputState |> exp1.Match |> exp2.Match
+
 and AlternationExpression(alt1:RegularExpression, alt2:RegularExpression) =
     inherit RegularExpression() 
     override _.Match(inputState) =
         let finalState = inputState |> alt1.Match
         inputState |> alt2.Match |> finalState.AddAll
         finalState
+
 and RepetitionExpression(repeat:RegularExpression) =
     inherit RegularExpression()
     override _.Match(inputState) =
@@ -57,6 +62,7 @@ and RepetitionExpression(repeat:RegularExpression) =
             state <- state |> repeat.Match
             state |> finalState.AddAll
         finalState
+
 and LiteralExpression(components:string) =
     inherit RegularExpression()
     override _.Match(inputState) =
@@ -69,36 +75,28 @@ and LiteralExpression(components:string) =
             )
         finalState
 
+///Helpers for Sytnax and Operators
+type String with
+    member this.Expr with get() : RegularExpression=
+        upcast LiteralExpression(this)
+    member this.Repeat with get() : RegularExpression =
+        upcast RepetitionExpression(this.Expr)
+
+type RegularExpression with
+    member this.Expr with get() : RegularExpression=
+        this
+    member this.Repeat with get() : RegularExpression =
+        upcast RepetitionExpression(this.Expr)
+    static member (.|) (a : RegularExpression, b: RegularExpression) : RegularExpression =
+        upcast AlternationExpression(a,b)
+    static member (.&) (a : RegularExpression, b: RegularExpression) : RegularExpression =
+        upcast SequenceExpression(a,b)
+
+///Example 
 module Example =
-    open System.Runtime.CompilerServices
-
-    [<Extension>]
-    type RegEx() =
-        [<Extension>]
-        static member inline AsRegex(this:string) : RegularExpression =
-            upcast LiteralExpression(this)
-        [<Extension>]
-        static member inline AsRegex(this:#RegularExpression) : RegularExpression = upcast this
-
-    type String with
-        member this.Repeat with get() = RepetitionExpression(this.AsRegex())
-
-    type RegularExpression with
-        member this.Repeat with get() = RepetitionExpression(this.AsRegex())
-
-    let inline asRegexHelper< ^a, ^b when (^a): (static member AsRegex: ^b -> RegularExpression)> (b: ^b) =
-        ((^a): (static member AsRegex: ^b -> RegularExpression) (b))
-    
-    let inline (@&) (a:^a) (b:^b) : RegularExpression =
-        let arg1 = asRegexHelper<RegEx,^a>(a)
-        let arg2 = asRegexHelper<RegEx,^b>(b)
-        upcast SequenceExpression(arg1, arg2)
-
-    let inline (@|) (a:^a) (b:^b) : RegularExpression =
-        let arg1 = asRegexHelper<RegEx,^a>(a)
-        let arg2 = asRegexHelper<RegEx,^b>(b)
-        upcast AlternationExpression(arg1, arg2)
 
     let main _ =
-        let regex = ("dog" @| "cat").Repeat @& "weather"
+        let regex = ("dog ".Expr .| "cat ".Expr).Repeat .& "weather".Expr
+        let find = (State "dog cat dog cat weather") |> regex.Match
+        //do something    
         ()
