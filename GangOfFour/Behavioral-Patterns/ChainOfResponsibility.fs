@@ -10,8 +10,10 @@
  *****************************************************************)
 namespace GangOfFour.ChainOfResponsibility
 
+///Domain Code
 type Topic = NoHelp | TopicCategory of int
 
+///Chain of Responsibility
 [<AbstractClass>]
 type HelpHandler(?optSuccessor:HelpHandler, ?optTopic: Topic) =
     let mutable topic = defaultArg optTopic NoHelp
@@ -54,7 +56,7 @@ type Application(topic:Topic) =
     override this.HandleHelp() =
         () //offer list of help topics
 
-//Example Code
+///Example Code
 module Example =
     let main _ =
         let printTopic = TopicCategory(1)
