@@ -70,23 +70,35 @@ and LiteralExpression(components:string) =
         finalState
 
 module Example =
-    type String with
-        member this.AsRegExpr with get() : RegularExpression =
+    open System.Runtime.CompilerServices
+
+    [<Extension>]
+    type RegEx() =
+        [<Extension>]
+        static member inline AsRegex(this:string) : RegularExpression =
             upcast LiteralExpression(this)
-        member this.Repeat with get() = RepetitionExpression(this.AsRegExpr)
+        [<Extension>]
+        static member inline AsRegex(this:#RegularExpression) : RegularExpression = upcast this
+
+    type String with
+        member this.Repeat with get() = RepetitionExpression(this.AsRegex())
 
     type RegularExpression with
-        member this.AsRegExpr with get() = this
-        member this.Repeat with get() = RepetitionExpression(this.AsRegExpr)
+        member this.Repeat with get() = RepetitionExpression(this.AsRegex())
 
-    let inline (&&&) (exp1:^a when ^a : (member AsRegExpr: RegularExpression))
-                        (exp2:^b when ^b : (member AsRegExpr: RegularExpression))  =
-        SequenceExpression(exp1.AsRegExpr, exp2.AsRegExpr)
-
-    let inline (|||) (alt1:^a when ^a : (member AsRegExpr: RegularExpression)) 
-                        (alt2:^b when ^b : (member AsRegExpr: RegularExpression))  =
-        AlternationExpression(alt1.AsRegExpr , alt2.AsRegExpr)
+    let inline asRegexHelper< ^a, ^b when (^a): (static member AsRegex: ^b -> RegularExpression)> (b: ^b) =
+        ((^a): (static member AsRegex: ^b -> RegularExpression) (b))
     
+    let inline (@&) (a:^a) (b:^b) : RegularExpression =
+        let arg1 = asRegexHelper<RegEx,^a>(a)
+        let arg2 = asRegexHelper<RegEx,^b>(b)
+        upcast SequenceExpression(arg1, arg2)
+
+    let inline (@|) (a:^a) (b:^b) : RegularExpression =
+        let arg1 = asRegexHelper<RegEx,^a>(a)
+        let arg2 = asRegexHelper<RegEx,^b>(b)
+        upcast AlternationExpression(arg1, arg2)
+
     let main _ =
-        let regex = ("dog" ||| "cat").Repeat &&& "weather"
+        let regex = ("dog" @| "cat").Repeat @& "weather"
         ()
