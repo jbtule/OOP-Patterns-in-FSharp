@@ -160,9 +160,38 @@ module BooleanInterpreter =
 
     and Constant(value:bool) = 
         inherit BooleanExp()
-        override _.Evaluate(context) =
+        override _.Evaluate(_) =
             value
         override _.Copy() = 
             upcast Constant(value)
-        override _.Replace(name', exp) =
+        override _.Replace(_, _) =
             upcast Constant(value)
+
+    ///Example Usage
+    module Example2 =
+        let main _ =
+            let context = Context()
+
+            let x = VariableExp("X")
+            let y = VariableExp("Y")
+
+            let exp =
+                OrExp(
+                    AndExp(Constant(true), x),
+                    AndExp(y, NotExp(x))
+                )
+            
+            context.Assign(x, false)
+            context.Assign(y, true)
+            
+            let result1 = exp.Evaluate(context)
+
+            let z = VariableExp("Z")
+            let notZ = NotExp(z)
+            let replacement = exp.Replace("Y", notZ)
+
+            context.Assign(z, true)
+
+            let result2 = replacement.Evaluate(context)
+
+            ()
