@@ -21,7 +21,7 @@ type MyList<'T> (?optSize:int) =
     let store = ResizeArray<'T>(size)
     member _.Count with get () = store.Count
     member _.Item with get index = store.[index]
-    interface IEnumerable<'T> with
+    interface seq<'T> with
         member _.GetEnumerator () : IEnumerator<'T> =
             upcast new MyEnumerator<'T>(store)
         member this.GetEnumerator(): System.Collections.IEnumerator = 
@@ -45,15 +45,41 @@ and MyEnumerator<'T> (list: ResizeArray<'T>) =
             current <- 0           
 
 ///Example
+
+type Employee (name) = 
+    member _.Print () =
+        printfn "%s" name
+
 [<AbstractClass>]
-type ListTraverser<'T>(list:MyList<'T>) =
+type Traverser<'T>(items:seq<'T>) =
     abstract ProcessItem: 'T -> bool
     member this.Traverse (): bool = 
         let mutable result = None
-        let iterator = (list :> IEnumerable<'T>).GetEnumerator()
-        while 
-            result |> Option.defaultValue true 
-            && (iterator.MoveNext()) 
+        let iterator = items.GetEnumerator()
+        while result |> Option.defaultValue true 
+                && (iterator.MoveNext()) 
             do
-            result <- Some <| this.ProcessItem(iterator.Current)
+                result <- Some <| this.ProcessItem(iterator.Current)
+        result |> Option.defaultValue false
+
+type PrintNEmployees(employees:seq<Employee> , n:int ) =
+    inherit Traverser<Employee> (employees)
+    let mutable count = 0
+    override _.ProcessItem(e) =
+        count <- count + 1
+        e.Print()
+        count < n
+
+[<AbstractClass>]
+type FilteringTraverser<'T>(items:seq<'T>) =
+    abstract ProcessItem: 'T -> bool
+    abstract TestItem: 'T -> bool
+    member this.Traverse (): bool = 
+        let mutable result = None
+        let iterator = items.GetEnumerator()
+        while result |> Option.defaultValue true 
+                && (iterator.MoveNext()) 
+            do
+                if this.TestItem(iterator.Current) then
+                    result <- Some <| this.ProcessItem(iterator.Current)
         result |> Option.defaultValue false
