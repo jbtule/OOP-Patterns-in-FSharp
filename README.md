@@ -19,17 +19,17 @@ That has not been anywhere near my experience, such that my feeling is this view
 
 | Creation | Structural | Behavioral |
 |-|-|-|
-| Abstract Factory | Adapter | Chain of Responsibility |
-| Builder | Bridge | Command |
-| Factory Method | Composite | Interpretor |
-| Prototype | Decorator | Iterator |
-| Singleton | Facade | Mediator |
-|  | Flyweight | Memento |
-|  | Proxy | Observer |
+| :heavy_check_mark: [Abstract Factory](GangOfFour/Creational-Patterns/AbstractFactory.fs) | :heavy_check_mark: [Adapter](GangOfFour/Structural-Patterns/Adapter.fs) | :heavy_check_mark: [Chain of Responsibility](GangOfFour/Behavioral-Patterns/ChainOfResponsibility.fs) |
+| :heavy_check_mark: [Builder](GangOfFour/Structural-Patterns/Builder.fs) | :heavy_check_mark: [Bridge](GangOfFour/Structural-Patterns/Bridge.fs) | :heavy_check_mark: [Command](GangOfFour/Behavioral-Patterns/Command.fs) |
+| :heavy_check_mark: [Factory Method](GangOfFour/Structural-Patterns/FactoryMethod.fs) | :heavy_check_mark: [Composite](GangOfFour/Structural-Patterns/Composite.fs) | :heavy_check_mark: [Interpreter](GangOfFour/Behavioral-Patterns/Interpreter.fs) |
+| :heavy_check_mark: [Prototype](GangOfFour/Structural-Patterns/Prototype.fs) | :heavy_check_mark: [Decorator](GangOfFour/Structural-Patterns/Decorator.fs) | :heavy_check_mark: [Iterator](GangOfFour/Behavioral-Patterns/Iterator.fs) |
+| :heavy_check_mark: [Singleton](GangOfFour/Structural-Patterns/Singleton.fs) | :heavy_check_mark: [Facade](GangOfFour/Structural-Patterns/Facade.fs) | :heavy_check_mark: [Mediator](GangOfFour/Behavioral-Patterns/Mediator.fs) |
+|  | :heavy_check_mark: [Flyweight](GangOfFour/Structural-Patterns/Flyweight.fs) | Memento |
+|  | :heavy_check_mark: [Proxy](GangOfFour/Structural-Patterns/Proxy.fs) | Observer |
 |  |  | State |
 |  |  | Strategy |
-|  |  | Template Method |
-|  |  | Vistor |
+|  |  | :heavy_check_mark: [Template Method](GangOfFour/Behavioral-Patterns/TemplateMethod.fs) |
+|  |  | :heavy_check_mark:  [Vistor](GangOfFour/Behavioral-Patterns/Vistor.fs) |
 
 
 ## Caveats
@@ -38,6 +38,7 @@ While I didn't run into any OOP issues implementing these patterns so far, I'm n
 
   * Operator overloading sucks in F#, it seems like it should be nice with statically resolved types, but it ended up being a headache. Operator overloading is not necessary for OOP, lot of people think it's an antipattern, but it was used in some samples, so when I used it I kept it simple as possible. Operator overloading isn't great for C# either BTW.
   * No protected methods. This is not a deal breaker for OOP programming, or the Gang of Four sample code, but as a side note, it is a kind of weird hill to die on for F# ([mentioned in the history of F#](https://dl.acm.org/doi/pdf/10.1145/3386325)), because now interop with C# frameworks that do metaprograming reflect/emit requiring writing a base class with protected virtual members (unfortunately can be a thing) is quite literally impossible. Not a big deal design wise, the F# ideology of forcing a public/internal choice, is probably better in fairness.
+  * I used a nightly build of [FSharp.Interop.NullOptAble](https://github.com/ekonbenefits/FSharp.Interop.NullOptAble) in the Mediator pattern to keep the domain types from allowing nullness (the. F# default), while keeping the code as simple since the original sample code had a lot of unguarded not null assumptions.
   
   
 ## Extensions
