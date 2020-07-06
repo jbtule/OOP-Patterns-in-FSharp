@@ -43,3 +43,8 @@ While I didn't run into any OOP issues implementing these patterns so far, I'm n
 ## Extensions
 
   * I'd like to port some more sample code from other source material more representive of C# specific patterns, that I can focus on more on C# interop. I do a lot of C# interop in my day job to the point that I am the author of 3 out of 6 **FSharp.Interop.*** libraries on Github, and feel like there is a lot of improvement that can be made for interop.
+  
+  
+## Contributing
+
+  * I'm happy to get critiques, suggestions, discussions, additional examples, etc in issues and pull requests.
