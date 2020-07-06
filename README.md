@@ -24,10 +24,10 @@ That has not been anywhere near my experience, such that my feeling is this view
 | :heavy_check_mark: [Factory Method](GangOfFour/Structural-Patterns/FactoryMethod.fs) | :heavy_check_mark: [Composite](GangOfFour/Structural-Patterns/Composite.fs) | :heavy_check_mark: [Interpreter](GangOfFour/Behavioral-Patterns/Interpreter.fs) |
 | :heavy_check_mark: [Prototype](GangOfFour/Structural-Patterns/Prototype.fs) | :heavy_check_mark: [Decorator](GangOfFour/Structural-Patterns/Decorator.fs) | :heavy_check_mark: [Iterator](GangOfFour/Behavioral-Patterns/Iterator.fs) |
 | :heavy_check_mark: [Singleton](GangOfFour/Structural-Patterns/Singleton.fs) | :heavy_check_mark: [Facade](GangOfFour/Structural-Patterns/Facade.fs) | :heavy_check_mark: [Mediator](GangOfFour/Behavioral-Patterns/Mediator.fs) |
-|  | :heavy_check_mark: [Flyweight](GangOfFour/Structural-Patterns/Flyweight.fs) | Memento |
-|  | :heavy_check_mark: [Proxy](GangOfFour/Structural-Patterns/Proxy.fs) | Observer |
-|  |  | State |
-|  |  | Strategy |
+|  | :heavy_check_mark: [Flyweight](GangOfFour/Structural-Patterns/Flyweight.fs) | :construction: Memento |
+|  | :heavy_check_mark: [Proxy](GangOfFour/Structural-Patterns/Proxy.fs) | :construction: Observer |
+|  |  | :construction: State |
+|  |  | :construction: Strategy |
 |  |  | :heavy_check_mark: [Template Method](GangOfFour/Behavioral-Patterns/TemplateMethod.fs) |
 |  |  | :heavy_check_mark:  [Vistor](GangOfFour/Behavioral-Patterns/Vistor.fs) |
 
