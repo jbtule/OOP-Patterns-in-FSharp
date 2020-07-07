@@ -33,7 +33,7 @@ type HomeController (logger : ILogger<HomeController>) =
 
         this.View({ RequestId = reqId })
 
-type StudentController (context:SchoolContext) =
+type StudentsController (context:SchoolContext) =
     inherit Controller ()
 
     member this.Index() : IActionResult Task=
