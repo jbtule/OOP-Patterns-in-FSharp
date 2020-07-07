@@ -10,6 +10,8 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open Microsoft.Extensions.DependencyInjection
+open ContosoUniversity.Data
 
 module Program =
     let exitCode = 0
@@ -30,7 +32,8 @@ module Program =
                 let context = services.GetRequiredService<SchoolContext>();
                 context |> DbInitializer.initialize
             with ex ->
-                let logger =
+                let logger = services.GetRequiredService<ILogger>()
+                logger.LogError(ex,"An error occurred while seeding the database.")
         
         host.Run()
         exitCode

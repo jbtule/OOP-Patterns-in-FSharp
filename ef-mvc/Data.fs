@@ -52,17 +52,17 @@ type SchoolContext (options:SchoolContext DbContextOptions) =
 
             [
                Enrollment(StudentID=1,CourseID=1050,Grade=Nullable Grade.A)
-               Enrollment(StudentID=1,CourseID=4022,Grade=C)
-               Enrollment(StudentID=1,CourseID=4041,Grade=B)
-               Enrollment(StudentID=2,CourseID=1045,Grade=B)
-               Enrollment(StudentID=2,CourseID=3141,Grade=F)
-               Enrollment(StudentID=2,CourseID=2021,Grade=F)
+               Enrollment(StudentID=1,CourseID=4022,Grade=Nullable Grade.C)
+               Enrollment(StudentID=1,CourseID=4041,Grade=Nullable Grade.B)
+               Enrollment(StudentID=2,CourseID=1045,Grade=Nullable Grade.B)
+               Enrollment(StudentID=2,CourseID=3141,Grade=Nullable Grade.F)
+               Enrollment(StudentID=2,CourseID=2021,Grade=Nullable Grade.F)
                Enrollment(StudentID=3,CourseID=1050)
                Enrollment(StudentID=4,CourseID=1050)
-               Enrollment(StudentID=4,CourseID=4022,Grade=F)
-               Enrollment(StudentID=5,CourseID=4041,Grade=C)
+               Enrollment(StudentID=4,CourseID=4022,Grade=Nullable Grade.F)
+               Enrollment(StudentID=5,CourseID=4041,Grade=Nullable Grade.C)
                Enrollment(StudentID=6,CourseID=1045)
-               Enrollment(StudentID=7,CourseID=3141,Grade=A)
+               Enrollment(StudentID=7,CourseID=3141,Grade=Nullable Grade.A)
             ]
             |> List.iter (context.Enrollments.Add >> ignore)
             context.SaveChanges() |> ignore
