@@ -1,4 +1,4 @@
-namespace ef_mvc
+namespace ContosoUniversity
 
 open System
 open System.Collections.Generic
@@ -11,6 +11,9 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open ContosoUniversity.Data
+open Microsoft.EntityFrameworkCore
+open Microsoft.Extensions.Configuration
 
 type Startup private () =
     new (configuration: IConfiguration) as this =
@@ -20,6 +23,14 @@ type Startup private () =
     // This method gets called by the runtime. Use this method to add services to the container.
     member this.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
+        
+        services.AddDbContext<SchoolContext>(
+                fun options -> 
+                    this.Configuration.GetConnectionString("DefaultConnections") 
+                    |> options.UseSqlite 
+                    |> ignore) 
+                |> ignore
+
         services.AddControllersWithViews().AddRazorRuntimeCompilation() |> ignore
         services.AddRazorPages() |> ignore
 

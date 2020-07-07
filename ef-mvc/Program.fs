@@ -22,6 +22,15 @@ module Program =
 
     [<EntryPoint>]
     let main args =
-        CreateHostBuilder(args).Build().Run()
-
+        let host = CreateHostBuilder(args).Build()
+        do 
+            use scope = host.Services.CreateScope()
+            let services = scope.ServiceProvider
+            try
+                let context = services.GetRequiredService<SchoolContext>();
+                context |> DbInitializer.initialize
+            with ex ->
+                let logger =
+        
+        host.Run()
         exitCode
