@@ -1,4 +1,4 @@
-namespace ef_mvc.Models
+namespace ContosoUniversity.Models
 
 open System
 

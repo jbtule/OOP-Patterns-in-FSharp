@@ -1,4 +1,4 @@
-namespace ef_mvc
+namespace ContosoUniversity
 
 open System
 open System.Collections.Generic

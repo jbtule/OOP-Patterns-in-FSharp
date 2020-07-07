@@ -1,4 +1,4 @@
-﻿namespace ef_mvc.Controllers
+﻿namespace ContosoUniversity.Controllers
 
 open System
 open System.Collections.Generic
