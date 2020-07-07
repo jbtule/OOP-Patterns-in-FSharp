@@ -8,8 +8,11 @@ open System.Diagnostics
 
 open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Logging
+open Microsoft.EntityFrameworkCore
 
+open ContosoUniversity.Data
 open ContosoUniversity.ViewModels
+open FSharp.Control.Tasks.V2
 
 type HomeController (logger : ILogger<HomeController>) =
     inherit Controller()
@@ -29,3 +32,12 @@ type HomeController (logger : ILogger<HomeController>) =
                 Activity.Current.Id
 
         this.View({ RequestId = reqId })
+
+type StudentController (context:SchoolContext) =
+    inherit Controller ()
+
+    member this.Index() : IActionResult Task=
+        task {
+            let! students = context.Students.ToListAsync()
+            return upcast this.View(students)
+        }
