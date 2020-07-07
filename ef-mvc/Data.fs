@@ -3,20 +3,21 @@ namespace ContosoUniversity.Data
 open ContosoUniversity.Models
 open Microsoft.EntityFrameworkCore
 open Unchecked
-open System.Linq
 open System
+open System.Linq
+
 
 type SchoolContext (options:SchoolContext DbContextOptions) =
     inherit DbContext(options)
-    
+
     member val Courses = defaultof<Course DbSet> with get,set
     member val Enrollments = defaultof<Enrollment DbSet> with get,set
     member val Students = defaultof<Student DbSet> with get,set
-
+       
     override _.OnModelCreating(modelBuilder) =
         modelBuilder.Entity<Course>().ToTable("Course") |> ignore
-        modelBuilder.Entity<Course>().ToTable("Enrollment") |> ignore
-        modelBuilder.Entity<Course>().ToTable("Student") |> ignore
+        modelBuilder.Entity<Enrollment>().ToTable("Enrollment") |> ignore
+        modelBuilder.Entity<Student>().ToTable("Student") |> ignore
 
  module DbInitializer = 
     let initialize (context:SchoolContext) =

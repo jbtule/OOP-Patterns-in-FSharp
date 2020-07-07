@@ -26,7 +26,7 @@ type Startup private () =
         
         services.AddDbContext<SchoolContext>(
                 fun options -> 
-                    this.Configuration.GetConnectionString("DefaultConnections") 
+                    this.Configuration.GetConnectionString("DefaultConnection") 
                     |> options.UseSqlite 
                     |> ignore) 
                 |> ignore

@@ -8,7 +8,7 @@ open System.ComponentModel.DataAnnotations.Schema;
 
 [<AllowNullLiteral>] //Since we are using EF we are going to have nulls, better for everyone if we let F# expect it.
 type Student () =
-    member val ID = defaultof<int> with get,set
+    member val StudentID = defaultof<int> with get,set
     member val LastName = defaultof<string> with get,set
     member val FirstMidName = defaultof<string> with get,set
     member val EnrollmentDate = defaultof<DateTime> with get,set
@@ -24,7 +24,7 @@ type Grade =
 
 [<AllowNullLiteral>]
 type Enrollment () =
-    member val EnrollemntID = defaultof<int> with get,set
+    member val EnrollmentID = defaultof<int> with get,set
     member val CourseID = defaultof<int> with get,set
     member val StudentID = defaultof<int> with get,set
     member val Grade = defaultof<Grade Nullable> with get,set

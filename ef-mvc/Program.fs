@@ -32,7 +32,7 @@ module Program =
                 let context = services.GetRequiredService<SchoolContext>();
                 context |> DbInitializer.initialize
             with ex ->
-                let logger = services.GetRequiredService<ILogger>()
+                let logger = services.GetRequiredService<ILogger<_>>()
                 logger.LogError(ex,"An error occurred while seeding the database.")
         
         host.Run()
