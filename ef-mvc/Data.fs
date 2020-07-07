@@ -7,13 +7,16 @@ open System
 open System.Linq
 
 
-type SchoolContext (options:SchoolContext DbContextOptions) =
+type SchoolContext (options:SchoolContext DbContextOptions) as this =
     inherit DbContext(options)
+    let _course= lazy this.Set<Course>() 
+    let _enrollment = lazy this.Set<Enrollment>()
+    let _students = lazy this.Set<Student>()  
+    
+    member _.Courses = _course.Force()
+    member _.Enrollments = _enrollment.Force()
+    member _.Students = _students.Force()
 
-    member val Courses = defaultof<Course DbSet> with get,set
-    member val Enrollments = defaultof<Enrollment DbSet> with get,set
-    member val Students = defaultof<Student DbSet> with get,set
-       
     override _.OnModelCreating(modelBuilder) =
         modelBuilder.Entity<Course>().ToTable("Course") |> ignore
         modelBuilder.Entity<Enrollment>().ToTable("Enrollment") |> ignore
