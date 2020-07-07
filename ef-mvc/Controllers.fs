@@ -13,6 +13,10 @@ open Microsoft.EntityFrameworkCore
 open ContosoUniversity.Data
 open ContosoUniversity.ViewModels
 open FSharp.Control.Tasks.V2
+open Microsoft.FSharp.Linq.NullableOperators
+open ContosoUniversity.Models
+
+type TaskResult = IActionResult Task
 
 type HomeController (logger : ILogger<HomeController>) =
     inherit Controller()
@@ -36,8 +40,27 @@ type HomeController (logger : ILogger<HomeController>) =
 type StudentsController (context:SchoolContext) =
     inherit Controller ()
 
-    member this.Index() : IActionResult Task=
+    member this.Index() : TaskResult =
         task {
             let! students = context.Students.ToListAsync()
             return upcast this.View(students)
+        }
+
+    member this.Details (id:int Nullable) : TaskResult =
+        task {
+            if id.HasValue |> not then
+                return upcast this.NotFound()
+            else
+                let! student = 
+                    context
+                        .Students
+                        .Include(fun s->s.Enrollments :> IEnumerable<Enrollment>)
+                        .ThenInclude(fun (e:Enrollment)->e.Course)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(fun m-> m.StudentID =? id)
+                if student |> isNull then
+                    return upcast this.NotFound()
+                else
+                    return upcast this.View(student)
+
         }
