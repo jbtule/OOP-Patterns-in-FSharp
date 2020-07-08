@@ -56,7 +56,7 @@ type StudentsController (context:SchoolContext) =
                 let! student = 
                     context
                         .Students
-                        .Include(fun s->s.Enrollments :> IEnumerable<_>)
+                        .Include(fun s->s.Enrollments :> seq<_>)
                         .ThenInclude(fun (e:Enrollment)->e.Course)
                         .AsNoTracking()
                         .FirstOrDefaultAsync(fun m-> m.StudentID = id')
