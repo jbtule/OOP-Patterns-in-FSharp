@@ -58,7 +58,7 @@ While I didn't run into any OOP issues implementing these patterns so far, I'm n
 
 Ran into more issues with the sample code at the start due to C# interoperablity
 
-  * DbContext, I'm not sure if there is something that was keeping `DbSet` from being injected or if my first attempt at using `member val` prevented was initializtion was overwriting. Either way my 2nd attempt was to initialize with `this.Set<Model>()` which caused a recursive initialization error. So I ended up using lazy backing fields for the properties and that worked just fine.
+  * DbContext, I'm not sure if there is something that was keeping `DbSet` from being injected or if my first attempt at using `member val` was prevented by  initializtion overwriting the fields. Either way, my 2nd attempt was to initialize with `this.Set<Model>()` which caused a recursive initialization error. So I ended up using lazy backing fields for the properties and that worked just fine.
   * Auto generated Linq expressions from param arrays don't work in F#. I had to make my own identity method that would allow the compiler to auto generate one expression and then use it on each element of an array literal. Using new F# open static type methods, made it look cleaner than it sounds.
   * Entity Framework overloads of Include and ThenInclude will need some type hints. `Include` lamba's results will need to be upcasted to IEnumerable<> to get the right overload, and then you have to add a type hint to the argument of the subsequent `ThenInclude`.
   * All the entities are allownull, but in usage, I wasn't sure if I wanted to null check or transform to option types. I did the later, and found an unhandled NRE based on user input thanks to type checking.
