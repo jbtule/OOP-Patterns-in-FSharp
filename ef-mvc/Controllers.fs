@@ -1,7 +1,6 @@
 ﻿namespace ContosoUniversity.Controllers
 
 open System
-open System.Collections.Generic
 open System.Linq
 open System.Threading.Tasks
 open System.Diagnostics
@@ -14,6 +13,7 @@ open Microsoft.EntityFrameworkCore
 open ContosoUniversity.Data
 open ContosoUniversity.ViewModels
 open FSharp.Control.Tasks.V2
+open ContosoUniversity
 open ContosoUniversity.Models
 
 type MVCTask = IActionResult Task
@@ -21,11 +21,24 @@ type UpdateExpr<'T> when 'T: not struct = System.Linq.Expressions.Expression<Fun
 [<AbstractClass;Sealed>]
 type internal Helper = 
     static member UpdateExpr ([<ReflectedDefinition>]expr:UpdateExpr<'a>) = expr
+
 open Helper
 
-type HomeController (logger : ILogger<HomeController>) =
+type HomeController (logger : ILogger<HomeController>, context:SchoolContext) =
     inherit Controller()
 
+
+    member this.About() = task {
+        let data = 
+            context
+                .Students
+                .GroupBy(fun s-> s.EnrollmentDate)
+                .Select(fun x -> {EnrollmentDate = Nullable x.Key; StudentCount =x.Count() })
+        let! model = data.AsNoTracking().ToListAsync()
+        return this.View(model)
+    }
+                
+                
     member this.Index () = this.View()
     member this.Privacy () = this.View()
 
@@ -42,10 +55,37 @@ type HomeController (logger : ILogger<HomeController>) =
 type StudentsController (context:SchoolContext) =
     inherit Controller ()
 
-    member this.Index() : MVCTask =
+    member this.Index(sortOrder:string, currentFilter:String, searchString:string, [<DefaultParameterValue(null)>] pageNumber:int Nullable) : MVCTask =
         task {
-            let! students = context.Students.ToListAsync()
-            return upcast this.View(students)
+            this.ViewData.["CurrentSort"] <- sortOrder
+            this.ViewData.["NameSortParm"] <- if String.IsNullOrEmpty(sortOrder) then "name_desc" else "" 
+            this.ViewData.["DateSortParm"] <- if sortOrder = "Date" then "date_desc" else "Date"
+
+            let searchString', pageNumber' =
+                if searchString |> (not << isNull) then
+                    searchString,Some 1
+                else
+                    currentFilter,pageNumber |> Option.ofNullable
+
+            this.ViewData.["CurrentFilter"] <- searchString';
+
+            let students = 
+                if not <| String.IsNullOrEmpty searchString' then
+                    context.Students.Where(fun s-> s.LastName.Contains(searchString') || s.FirstMidName.Contains(searchString'))
+                else
+                    upcast context.Students
+        
+            let students' = 
+                match sortOrder with
+                | "name_desc" ->  students.OrderByDescending(fun s -> s.LastName)
+                | "Date" -> students.OrderBy(fun s->s.EnrollmentDate)
+                | "date_desc" -> students.OrderByDescending(fun s->s.EnrollmentDate)
+                | _ -> students.OrderBy(fun s->s.LastName)
+             
+            let pageSize = 3; 
+            let students'' = students'.AsNoTracking()
+            let! model = PaginatedResizeArray.CreateAsync(students'', pageNumber' |> Option.defaultValue 1, pageSize)
+            return upcast this.View(model)
         }
 
     member this.Details (id:int Nullable) : MVCTask =

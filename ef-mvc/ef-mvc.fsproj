@@ -10,6 +10,7 @@
     <Compile Include="Models.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="ViewModels.fs" />
+    <Compile Include="Tools.fs" />
     <Compile Include="Controllers.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
