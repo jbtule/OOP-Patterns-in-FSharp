@@ -31,8 +31,18 @@ That has not been anywhere near my experience, such that my feeling is this view
 |  |  | :heavy_check_mark: [Template Method](GangOfFour/Behavioral-Patterns/TemplateMethod.fs) |
 |  |  | :heavy_check_mark:  [Vistor](GangOfFour/Behavioral-Patterns/Vistor.fs) |
 
+### [MVC Entity Framework Sample Code](https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/?view=aspnetcore-3.1)
 
-## Caveats
+|             | Chapters       |             |
+|-------------|----------------|-------------|
+| :heavy_check_mark: Get Started | Complex Data   | Inheritance |
+| :heavy_check_mark: CRUD        | Related Data   | Advanced    |
+| Sort Filter | Update Related |             |
+| Migrations  | Concurency     |             |
+
+## Notes & Caveats
+
+### Gang Of Four Patterns
 
 While I didn't run into any OOP issues implementing these patterns so far, I'm noting the following:
 
@@ -40,6 +50,15 @@ While I didn't run into any OOP issues implementing these patterns so far, I'm n
   * No protected methods. This is not a deal breaker for OOP programming, or the Gang of Four sample code, but as a side note, it is a kind of weird hill to die on for F# ([mentioned in the history of F#](https://dl.acm.org/doi/pdf/10.1145/3386325)), because now interop with C# frameworks that do metaprograming reflect/emit requiring writing a base class with protected virtual members (unfortunately can be a thing) is quite literally impossible. Not a big deal design wise, the F# ideology of forcing a public/internal choice, is probably better in fairness.
   * I used a nightly build of [FSharp.Interop.NullOptAble](https://github.com/ekonbenefits/FSharp.Interop.NullOptAble) in the Mediator pattern to keep the domain types from allowing nullness (the. F# default), while keeping the code as simple since the original sample code had a lot of unguarded not null assumptions.
   
+### MVC Entity Framework Sample Code
+
+Ran into more issues with the sample code at the start due to C# interoperablity
+
+  * DbContext, I'm not sure if there is something that was keeping `DbSet` from being injected or if my first attempt at using `member val` prevented was initializtion was overwriting. Either way my 2nd attempt was to initialize with `this.Set<Model>()` which caused a recursive initialization error. So I ended up using lazy backing fields for the properties and that worked just fine.
+  * Auto generated Linq expressions from param arrays don't work in F#. I had to make my own identity method that would allow the compiler to auto generate one expression and then use it on each element of an array literal. Using new open static methods, made it look cleaner than it sounds.
+  * Entity Framework overloads of Include and ThenInclude will need some type hints. `Include` lamba's results will need to be upcasted to IEnumerable<> to get the right overload, and then you have to add a type hint to the argument of the subsequent `ThenInclude`.
+  * All the entities are allownull, but in usage, I wasn't sure if I wanted to null check or transform to option types. I did the later, and found an unhandled NRE based on user input thanks to type checking.
+
   
 ## Extensions
 
