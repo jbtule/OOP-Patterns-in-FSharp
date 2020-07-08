@@ -35,10 +35,10 @@ That has not been anywhere near my experience, such that my feeling is this view
 
 |             | Chapters       |             |
 |-------------|----------------|-------------|
-| :heavy_check_mark: Get Started | Complex Data   | Inheritance |
-| :heavy_check_mark: CRUD        | Related Data   | Advanced    |
-| Sort Filter | Update Related |             |
-| Migrations  | Concurency     |             |
+| :heavy_check_mark: Get Started | :construction: Complex Data   | :construction: Inheritance |
+| :heavy_check_mark: CRUD        | :construction: Related Data   | :construction: Advanced    |
+| :construction: Sort Filter | :construction: Update Related |             |
+| :construction: Migrations  | :construction: Concurency     |             |
 
 ## Notes & Caveats
 
