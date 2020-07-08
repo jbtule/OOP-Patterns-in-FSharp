@@ -31,7 +31,7 @@ That has not been anywhere near my experience, such that my feeling is this view
 |  |  | :heavy_check_mark: [Template Method](GangOfFour/Behavioral-Patterns/TemplateMethod.fs) |
 |  |  | :heavy_check_mark:  [Vistor](GangOfFour/Behavioral-Patterns/Vistor.fs) |
 
-### [MVC Entity Framework Sample Code](https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/?view=aspnetcore-3.1)
+### [MVC Entity Framework Sample Code](ef-mvc) [[C# Tutorial](https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/?view=aspnetcore-3.1)]
 
 |             | Chapters       |             |
 |-------------|----------------|-------------|
