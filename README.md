@@ -35,6 +35,8 @@ Also aiming to explore C# specific sample code to evaluate, what I suspect is a 
 
 ### [MVC Entity Framework Sample Code](ef-mvc) [[C# Tutorial](https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/?view=aspnetcore-3.1)]
 
+*ASP.NET Core MVC and Entity Framework Core, trying to make it as readable as possible. Much more difficult, a suspect anything that requires code gen will be given up on. *
+
 |             | Chapters       |             |
 |-------------|----------------|-------------|
 | :heavy_check_mark: Get Started | :construction: Complex Data   | :construction: Inheritance |
