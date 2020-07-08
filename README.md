@@ -11,6 +11,8 @@ This view point is not common, rather more typically I've seen is represented by
 
 That has not been anywhere near my experience, such that my feeling is this view point may be more about C# interop than OOP. But to be fair, I definately favor functional programing, and typically only do Object Oriented Style in F# to interact with frameworks patterns. So to better test this hypotheses, I thought I'd explore porting all the sample code in old standard Gang of Four Design Patterns book – [Design Patterns: Elements of Reusable Object-Oriented Software by Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides](https://books.google.com/books/about/Design_Patterns.html?id=6oHuKQe3TjQC). 
 
+Also aiming to explore C# specific sample code to evaluate, what I suspect is a worse experience, C# interop.
+
 ## Methodology/Sections/Progress
 
 ### Gang Of Four Patterns
