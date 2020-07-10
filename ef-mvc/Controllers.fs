@@ -99,7 +99,7 @@ type StudentsController (context:SchoolContext) =
                         .Include(fun s->s.Enrollments :> seq<_>)
                         .ThenInclude(fun (e:Enrollment)->e.Course)
                         .AsNoTracking()
-                        .FirstOrDefaultAsync(fun m-> m.StudentID = id')
+                        .FirstOrDefaultAsync(fun m-> m.ID = id')
                 match student |> Option.ofObj with
                 | None -> return upcast this.NotFound()
                 | Some student' ->
@@ -143,7 +143,7 @@ type StudentsController (context:SchoolContext) =
             match id |> Option.ofNullable with
             | None -> return upcast this.NotFound()
             | Some id' ->
-                let! studentToUpdate = context.Students.FirstOrDefaultAsync(fun s -> s.StudentID = id')
+                let! studentToUpdate = context.Students.FirstOrDefaultAsync(fun s -> s.ID = id')
                 match studentToUpdate |> Option.ofObj with
                 | None -> return upcast this.NotFound()
                 | Some studentToUpdate' ->
@@ -173,7 +173,7 @@ type StudentsController (context:SchoolContext) =
             match id |> Option.ofNullable with
             | None -> return upcast this.NotFound()
             | Some id' ->
-                let! student = context.Students.FirstOrDefaultAsync(fun s -> s.StudentID = id')
+                let! student = context.Students.FirstOrDefaultAsync(fun s -> s.ID = id')
                 match student |> Option.ofObj with
                 | None -> return upcast this.NotFound()
                 | Some student' ->
