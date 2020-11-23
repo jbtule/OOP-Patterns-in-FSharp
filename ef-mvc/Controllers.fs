@@ -22,7 +22,7 @@ type UpdateExpr<'T> when 'T: not struct = System.Linq.Expressions.Expression<Fun
 type internal Helper = 
     static member UpdateExpr ([<ReflectedDefinition>]expr:UpdateExpr<'a>) = expr
 
-open Helper
+open type Helper
 
 type HomeController (logger : ILogger<HomeController>, context:SchoolContext) =
     inherit Controller()
