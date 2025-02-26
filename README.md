@@ -17,7 +17,7 @@ Also aiming to explore C# specific sample code to evaluate, what I suspect is a 
 
 ### Gang Of Four Patterns
 
-*I used F# default features for code correctness in full force and didn't concern with adding extra code for C# easy consumption. I used option types instead of allowing null (unless mimicing a 3rd party framework, not the pattern), I made the bare minimum of fields mutable, I used functional style inside methods while externally presenting OOP*
+*I used F# default features for code correctness in full force and didn't concern with adding extra code for C# easy consumption. I used option types instead of allowing null (unless mimicking a 3rd party framework, not the pattern), I made the bare minimum of fields mutable, I used functional style inside methods while externally presenting OOP*
 
 | Creation | Structural | Behavioral |
 |-|-|-|
